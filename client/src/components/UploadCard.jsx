@@ -32,15 +32,13 @@ export default function UploadCard({ onAnalyze, loading, error }) {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="w-full max-w-xl border border-rule bg-ledger/60 p-6 shadow-[4px_4px_0_0_#1F2421]"
-    >
-      <div className="mb-4 flex items-baseline justify-between">
-        <h2 className="font-mono text-xs uppercase tracking-[0.2em] text-inkfade">
-          01 — Upload document
-        </h2>
-        <span className="font-mono text-[10px] text-inkfade">PDF / DOCX · 5MB max</span>
+    <form onSubmit={handleSubmit} className="upload-sheet">
+      <div className="upload-heading-row">
+        <div>
+          <p className="section-kicker"><span className="kicker-mark">01</span> START HERE</p>
+          <h2 className="upload-title">Your resume, please.</h2>
+        </div>
+        <span className="file-limit">PDF / DOCX <i /> UP TO 5 MB</span>
       </div>
 
       <div
@@ -51,9 +49,7 @@ export default function UploadCard({ onAnalyze, loading, error }) {
         onDragLeave={() => setDragActive(false)}
         onDrop={handleDrop}
         onClick={() => inputRef.current?.click()}
-        className={`relative flex h-40 cursor-pointer flex-col items-center justify-center overflow-hidden border-2 border-dashed transition-colors ${
-          dragActive ? "border-signal bg-signal/5" : "border-rule bg-paper"
-        }`}
+        className={`drop-zone ${dragActive ? "is-active" : ""} ${file ? "has-file" : ""}`}
       >
         {loading && <div className="scan-beam" />}
         <input
@@ -63,49 +59,49 @@ export default function UploadCard({ onAnalyze, loading, error }) {
           className="hidden"
           onChange={(e) => handleFile(e.target.files[0])}
         />
+        <span className="upload-symbol" aria-hidden="true">↑</span>
         {file ? (
-          <div className="text-center">
-            <p className="font-mono text-sm font-medium text-ink">{file.name}</p>
-            <p className="mt-1 font-mono text-[10px] text-inkfade">
-              {(file.size / 1024).toFixed(0)} KB · click to replace
-            </p>
+          <div className="drop-copy">
+            <p className="drop-title">{file.name}</p>
+            <p className="drop-hint">{(file.size / 1024).toFixed(0)} KB <span>·</span> click to replace</p>
           </div>
         ) : (
-          <div className="text-center">
-            <p className="font-mono text-sm text-ink">Drop resume here</p>
-            <p className="mt-1 font-mono text-[10px] text-inkfade">
-              or click to browse
+          <div className="drop-copy">
+            <p className="drop-title">Drop it like it’s a draft</p>
+            <p className="drop-hint">
+              or <span className="browse-link">browse files</span> from your device
             </p>
           </div>
         )}
+        <span className="drop-corner" aria-hidden="true">✳</span>
       </div>
 
-      <div className="mt-5">
-        <h2 className="mb-2 font-mono text-xs uppercase tracking-[0.2em] text-inkfade">
-          02 — Target role <span className="normal-case text-inkfade/70">(optional)</span>
-        </h2>
+      <div className="role-field">
+        <div className="role-label-row">
+          <label htmlFor="job-description" className="section-kicker"><span className="kicker-mark kicker-mark-green">02</span> ADD A TARGET ROLE</label>
+          <span className="optional-note">optional, but useful</span>
+        </div>
         <textarea
+          id="job-description"
           value={jobDescription}
           onChange={(e) => setJobDescription(e.target.value)}
-          placeholder="Paste a job description to match keywords against a specific role..."
+          placeholder="Paste the job description here to check how well your resume lines up..."
           rows={4}
-          className="w-full resize-none border border-rule bg-paper p-3 font-mono text-xs text-ink placeholder:text-inkfade/60 focus:border-signal focus:outline-none"
+          className="role-textarea"
         />
       </div>
 
       {error && (
-        <p className="mt-4 border border-fail bg-fail/10 p-3 font-mono text-xs text-fail">
-          {error}
-        </p>
+        <p className="error-message" role="alert">{error}</p>
       )}
 
-      <button
-        type="submit"
-        disabled={!file || loading}
-        className="mt-5 w-full bg-ink py-3 font-mono text-xs uppercase tracking-[0.2em] text-paper transition-colors hover:bg-signalDark disabled:cursor-not-allowed disabled:opacity-40"
-      >
-        {loading ? "Scanning…" : "Run ATS scan"}
-      </button>
+      <div className="upload-actions">
+        <p className="privacy-note"><span aria-hidden="true">✳</span> Your next step starts with a closer look.</p>
+        <button type="submit" disabled={!file || loading} className="scan-button">
+          <span>{loading ? "Scanning" : "Run my scan"}</span>
+          <span className="button-arrow" aria-hidden="true">↗</span>
+        </button>
+      </div>
     </form>
   );
 }

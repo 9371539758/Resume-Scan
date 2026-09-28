@@ -9,7 +9,7 @@ export default function ScoreGauge({ score, label, size = 160 }) {
 
   return (
     <div
-      className="relative flex flex-col items-center justify-center"
+      className="score-gauge"
       style={{ width: size, height: size }}
     >
       <svg
@@ -46,13 +46,13 @@ export default function ScoreGauge({ score, label, size = 160 }) {
           }}
         />
       </svg>
-      <div className="absolute flex flex-col items-center">
-        <span className="font-mono text-3xl font-bold text-ink">{score}</span>
-        <span className="font-mono text-[10px] uppercase tracking-widest text-inkfade">
+      <div className="score-value-wrap">
+        <span className="score-value">{score}</span>
+        <span className="score-out-of">
           / 100
         </span>
       </div>
-      <span className="mt-2 font-mono text-xs uppercase tracking-widest text-inkfade">
+      <span className="score-label">
         {label}
       </span>
     </div>

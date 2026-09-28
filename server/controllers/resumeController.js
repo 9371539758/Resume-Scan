@@ -2,7 +2,7 @@ import Resume from "../models/Resume.js";
 import { extractText } from "../utils/extractText.js";
 import { analyzeResume } from "../utils/aiAnalyzer.js";
 
-// @desc Upload a resume, analyze with Gemini, save to MongoDB
+// @desc Upload a resume, analyze with Groq, save to MongoDB
 // @route POST /api/resumes/analyze
 export const analyzeResumeUpload = async (req, res) => {
   try {
@@ -30,7 +30,7 @@ export const analyzeResumeUpload = async (req, res) => {
       rawText,
       jobDescription
     );
-    // Convert Gemini section strings into objects expected by MongoDB
+    // Convert model section strings into objects expected by MongoDB
 if (Array.isArray(analysis.sections)) {
   analysis.sections = analysis.sections.map((section) => {
     if (typeof section === "string") {
@@ -43,7 +43,7 @@ if (Array.isArray(analysis.sections)) {
     return section;
   });
 }
-    console.log("========== GEMINI RESPONSE ==========");
+    console.log("========== GROQ RESPONSE ==========");
 console.log(JSON.stringify(analysis, null, 2));
 console.log("====================================");
 

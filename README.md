@@ -1,15 +1,15 @@
-# 🚀 ATS-Insights – AI Resume Analyzer (MERN + Gemini AI)
+# 🚀 ATS-Insights – AI Resume Analyzer (MERN + Groq API)
 
 Resume Scan is a full-stack AI-powered web application that analyzes resumes using ATS (Applicant Tracking System) principles. Users can upload a PDF or DOCX resume, optionally provide a job description, and receive a detailed AI-generated evaluation including ATS score, keyword analysis, strengths, weaknesses, formatting suggestions, and actionable improvements.
 
-The project is built using the MERN stack and integrates Google's Gemini AI for intelligent resume analysis.
+The project is built using the MERN stack and uses the Groq API with Llama 3.3 70B for resume analysis.
 
 ---
 
 # ✨ Features
 
 - 📄 Upload resumes in **PDF** or **DOCX** format
-- 🤖 AI-powered resume analysis using **Google Gemini**
+- 🤖 AI-powered resume analysis using **Llama 3.3 70B via Groq**
 - 📊 Overall resume score
 - 🎯 ATS compatibility score
 - 🔍 Matched & missing keyword analysis
@@ -43,7 +43,7 @@ The project is built using the MERN stack and integrates Google's Gemini AI for 
 
 ### AI
 
-- Google Gemini API
+- Groq API
 
 ---
 
@@ -97,9 +97,9 @@ If the uploaded document is scanned or contains insufficient text, the applicati
 
 ## Step 3 — AI Analysis
 
-The extracted resume text, along with an optional job description, is sent to Google Gemini.
+The extracted resume text, along with an optional job description, is sent to Groq's Llama 3.3 70B model.
 
-Gemini evaluates the resume and returns:
+The model evaluates the resume and returns:
 
 - Overall Score
 - ATS Compatibility
@@ -168,7 +168,7 @@ PORT=5001
 
 MONGO_URI=YOUR_MONGODB_URI
 
-GEMINI_API_KEY=YOUR_GEMINI_API_KEY
+GROQ_API_KEY=YOUR_GROQ_API_KEY
 
 CLIENT_URL=http://localhost:5173
 ```
@@ -264,7 +264,7 @@ Returns server status.
 3. Set Root Directory to `server`
 4. Add environment variables:
    - MONGO_URI
-   - GEMINI_API_KEY
+   - GROQ_API_KEY
    - CLIENT_URL
 5. Deploy
 

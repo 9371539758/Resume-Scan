@@ -1,12 +1,10 @@
+import dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
-import dotenv from "dotenv";
 import connectDB from "./config/db.js";
 import resumeRoutes from "./routes/resumeRoutes.js";
 
 dotenv.config();
-console.log("Gemini Key Loaded:", !!process.env.GEMINI_API_KEY);
-console.log("Gemini Key Prefix:", process.env.GEMINI_API_KEY?.substring(0, 8));
 
 const app = express();
 

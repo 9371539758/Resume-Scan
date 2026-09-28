@@ -26,33 +26,40 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen">
-      <header className="border-b border-rule bg-paper/90 backdrop-blur">
-        <div className="mx-auto flex max-w-4xl items-center justify-between px-6 py-5">
-          <div className="flex items-center gap-2">
-            <span className="h-2 w-2 rounded-full bg-signal" />
-            <h1 className="font-mono text-sm font-bold uppercase tracking-[0.25em] text-ink">
-              Resume Scan
-            </h1>
+    <div className="app-shell">
+      <header className="site-header">
+        <div className="site-header-inner">
+          <div className="brand-lockup">
+            <span className="brand-mark">R.</span>
+            <h1 className="brand-name">Resume Scan</h1>
           </div>
-          <span className="font-mono text-[10px] uppercase tracking-widest text-inkfade">
-            ATS Analysis Engine
+          <span className="header-note">
+            <span className="header-note-dot" />
+            A sharper first impression
           </span>
         </div>
       </header>
 
-      <main className="mx-auto flex max-w-4xl flex-col items-center gap-8 px-6 py-12">
+      <main className="app-main">
         {!result && (
-          <div className="mb-2 text-center">
-            <h2 className="font-mono text-2xl font-bold text-ink sm:text-3xl">
-              Will your resume clear the gate?
-            </h2>
-            <p className="mx-auto mt-3 max-w-md text-sm text-inkfade">
-              Upload your resume for a full ATS-style audit — parsing
-              compatibility, keyword coverage, section structure, and
-              concrete fixes.
-            </p>
-          </div>
+          <section className="intro-panel">
+            <div className="intro-copy">
+              <p className="eyebrow"><span>THE RESUME WORKSHOP</span> <span className="eyebrow-number">NO. 01</span></p>
+              <h2 className="intro-title">
+                Make your resume<br />
+                <span className="title-highlight">work harder.</span>
+              </h2>
+              <p className="intro-description">
+                A thoughtful ATS check for the details that get you noticed: clear structure, role-fit keywords, and practical next steps.
+              </p>
+            </div>
+            <aside className="intro-stamp" aria-label="Resume review checklist">
+              <span className="stamp-spark">✳</span>
+              <span className="stamp-caption">GOOD WORK<br />GETS SEEN</span>
+              <span className="stamp-rule" />
+              <span className="stamp-index">SCAN / 001</span>
+            </aside>
+          </section>
         )}
 
         <UploadCard onAnalyze={handleAnalyze} loading={loading} error={error} />
@@ -61,19 +68,18 @@ export default function App() {
           <>
             <button
               onClick={() => setResult(null)}
-              className="font-mono text-xs uppercase tracking-widest text-inkfade underline underline-offset-4 hover:text-signal"
+              className="result-reset"
             >
-              ← Scan another resume
+              <span aria-hidden="true">↖</span> Scan another resume
             </button>
             <ResultsDashboard result={result} />
           </>
         )}
       </main>
 
-      <footer className="border-t border-rule py-6 text-center">
-        <p className="font-mono text-[10px] uppercase tracking-widest text-inkfade">
-         MERN + GEMINI AI • ATS INSIGHTS
-        </p>
+      <footer className="site-footer">
+        <span>RESUME SCAN <span className="footer-star">✳</span> ATS INSIGHTS</span>
+        <span>MADE FOR THE NEXT OPPORTUNITY</span>
       </footer>
     </div>
   );

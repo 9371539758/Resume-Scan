@@ -1,10 +1,11 @@
+import Groq from "groq-sdk";
+
 const SYSTEM_PROMPT = `
-You are an expert ATS Resume Analyzer.
+You are an Expert ATS Resume Analyzer.
 
 Return ONLY valid JSON.
 
-Use exactly this schema:
-
+Schema:
 {
   "overallScore": 0,
   "atsCompatibility": 0,
@@ -22,68 +23,71 @@ function buildPrompt(resumeText, jobDescription = "") {
   return `
 ${SYSTEM_PROMPT}
 
-Resume:
+### Resume
 
 ${resumeText}
 
 ${
   jobDescription
-    ? `Job Description:\n${jobDescription}`
-    : ""
+    ? `### Job Description
+${jobDescription}`
+    : "No job description provided."
 }
 `;
 }
 
 function safeParseJSON(text) {
-  const cleaned = text
-    .replace(/```json/g, "")
-    .replace(/```/g, "")
-    .trim();
-
-  return JSON.parse(cleaned);
+  try {
+    return JSON.parse(
+      text
+        .replace(/```json/g, "")
+        .replace(/```/g, "")
+        .trim()
+    );
+  } catch {
+    throw new Error("Groq returned invalid JSON.");
+  }
 }
 
-export const analyzeResume = async (
+export async function analyzeResume(
   resumeText,
   jobDescription = ""
-) => {
+) {
+  if (!resumeText.trim()) {
+    throw new Error("Resume text is required.");
+  }
 
-  const response = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${process.env.GEMINI_API_KEY}`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+  const apiKey = process.env.GROQ_API_KEY;
+
+  if (!apiKey) {
+    throw new Error("GROQ_API_KEY is not configured on the server.");
+  }
+
+  const groq = new Groq({ apiKey });
+
+  const completion = await groq.chat.completions.create({
+    model: "openai/gpt-oss-120b",
+    temperature: 0.2,
+    response_format: {
+      type: "json_object",
+    },
+    messages: [
+      {
+        role: "system",
+        content: SYSTEM_PROMPT,
       },
-      body: JSON.stringify({
-        contents: [
-          {
-            parts: [
-              {
-                text: buildPrompt(resumeText, jobDescription),
-              },
-            ],
-          },
-        ],
-      }),
-    }
-  );
+      {
+        role: "user",
+        content: buildPrompt(resumeText, jobDescription),
+      },
+    ],
+  });
 
-  const data = await response.json();
+  const response = completion.choices[0]?.message?.content;
 
-  if (!response.ok) {
-    console.error(data);
-    throw new Error(
-      data.error?.message || "Gemini API request failed"
-    );
+  if (!response) {
+    throw new Error("No response from Groq.");
   }
 
-  const text =
-    data.candidates?.[0]?.content?.parts?.[0]?.text;
-
-  if (!text) {
-    throw new Error("No response received from Gemini.");
-  }
-
-  return safeParseJSON(text);
-};
+  return safeParseJSON(response);
+}

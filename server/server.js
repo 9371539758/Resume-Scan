@@ -11,7 +11,7 @@ const app = express();
 // Middleware
 app.use(
   cors({
-    origin: true,
+    origin: "https://resume-scan-1.onrender.com/",
     credentials: true,
   })
 );
